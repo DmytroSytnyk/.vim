@@ -1,0 +1,340 @@
+"-------------------------
+" Pento VIM settings
+"-------------------------
+
+"-------------------------
+" Common settings
+"-------------------------
+" Use Vim settings, rather then Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
+" New leader key
+let mapleader = ","
+
+" More suitable mapping
+function SMap(key, action, ...)
+let modes = " vi"
+if (a:0 > 0)
+let modes = a:{1}
+endif
+if (match(modes, '\Ii') != -1)
+execute 'imap ' . a:key . ' <Esc>' . a:action
+endif
+if (match(modes, '\Nn') != -1)
+execute 'nmap ' . a:key . ' <Esc>' . a:action
+endif
+if (match(modes, ' ') != -1)
+execute 'map ' . a:key . ' <Esc>' . a:action
+endif
+if (match(modes, '\Vv') != -1)
+execute 'vmap ' . a:key . ' <Esc>' . a:action
+endif
+endfunction
+
+" Enable loading filetype and indentation plugins
+filetype plugin on
+filetype indent on
+
+" Allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
+" Keep 50 lines of command line history
+set history=50
+
+" Show the cursor position all the time
+set ruler
+
+" Display incomplete commands
+set showcmd
+
+" Turn on number vertical line
+set number
+
+" I don't like backups
+set nobackup
+
+" Autoclose folds, when moving out of them
+"set foldclose=all
+
+" Open all folds
+set foldenable
+" I like {{{ }}} folds
+"set foldmethod=marker
+set foldmethod=indent
+
+" Use incremental searching
+set incsearch
+
+" Do not highlight search results
+set nohlsearch
+
+" Jump 5 lines when running out of the screen
+set scrolljump=7
+
+" Indicate jump out of the screen when 10 lines before end of the screen
+set scrolloff=7
+
+
+" Turn off any bells
+set novisualbell
+set t_vb=
+
+" Enable mouse
+set mouse=a
+set mousemodel=popup
+
+" Default encoding
+set termencoding=utf-8
+set fileencodings=utf-8,cp1251,cp866,koi8-r
+
+" Do NOT unload buffer when switch to another one
+" this allows to edit several files in the same time without having to save
+" them each time you switch between them
+set hidden
+
+" Hide the mouse when typing text
+set mousehide
+
+" Turn on autoindent
+set autoindent
+
+" Auto indent after a {
+set smartindent
+
+" Switch on syntax highlighting if it wasn't on yet.
+syntax on
+
+" Expand tab to spaces ?
+set expandtab
+
+" Default tab size
+set shiftwidth=2
+set softtabstop=2
+"set tabstop=4
+
+" Status line format
+set statusline=%<%f%h%m%r\ %b\ %{&encoding}\ 0x\ \ %l,%c%V\ %P
+
+" Fix <Enter> for comment
+set fo+=cr
+
+" Session options
+set sessionoptions=curdir,buffers,tabpages
+set foldcolumn=2
+
+"-------------------------
+" Useful functions
+"-------------------------
+
+function MoveTabLeft()
+let current_tab = tabpagenr()
+if current_tab > 1
+let current_tab = current_tab - 2
+execute 'tabmove' current_tab
+endif
+endfunction
+
+function MoveTabRight()
+let current_tab = tabpagenr()
+execute 'tabmove' current_tab
+endfunction
+
+
+"-------------------------
+" Bindings
+"-------------------------
+
+" Make <Backspace> act as <Delete> in Visual mode?
+vmap <BS> x
+
+" Wrap selected text to 80 symbols per line
+vmap <C-b> <esc>:'<,'>!fold -w 120 -s<cr>
+
+" CTRL-C and CTRL-Insert are Copy
+" vmap <C-C> "+yi
+" imap <C-V> <esc>"+gPi
+
+" Make ctrl-shift-V work like in Xterm
+imap <C-S-V> <MiddleMouse>
+
+" Use CTRL-F12 for tags generation 
+" and CTRL-F for omni completion
+map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+imap <C-F> <C-X><C-O>
+
+" Search & replace the word under the cursor
+nmap ; :%s/\<<c-r>=expand("<cword>")<cr>\>/
+
+" F2 to quick save
+call SMap("<F2>", ":w<cr>")
+
+" F4 - Project toogle
+" call SMap("<silent><F4>", "<Plug>ToggleProject")
+
+" F4 - show buffers
+call SMap("<F4>", ":ls<cr>:b")
+
+" F6 - prev buffer
+call SMap("<F6>", ":bp<cr>")
+
+" F7 - next buffer
+call SMap("<F7>", ":bn<cr>")
+
+" ctrl+k - previous tab
+call SMap("<C-h>", ":tabprevious<CR>")
+
+" ctrl+l - next tab
+call SMap("<C-l>", ":tabnext<CR>")
+
+" F8 - Marks
+call SMap("<F8>", ":MarksBrowser<cr>")
+
+" F10 kill buffer
+call SMap("<F10>", ":bd<cr>")
+
+" F11 - Tlist
+call SMap("<F11>", ":TlistToggle<cr>")
+
+" F12 to quick explorer
+call SMap("<F12>", ":Explore<cr>")
+
+" < & > to indent blocks
+vmap < <gv
+vmap > >gv
+
+" Switch off fucked 'Replace mode'
+imap <Ins> <Esc>wq
+
+
+" C-T - new tab
+call SMap("<C-t>", ":tabnew<cr>")
+
+" Open tag under cursor in new tab
+map <C-W>] <C-W>]:tab split<CR>gT:q<CR>gt
+
+map <F3> :vimgrep /fixme\\|todo/j *.[py,c,cc,pl]<CR>:cw<CR>
+
+" Dublicate current line
+imap <C-d> <esc>yypi
+
+" Tab autocompletion
+function InsertTabWrapper()
+let col = col('.') - 1
+if !col || getline('.')[col - 1] !~ '\k'
+return "\<tab>"
+else
+return "\<c-p>"
+endif
+endfunction
+
+imap <tab> <c-r>=InsertTabWrapper()<cr>
+
+set complete=""
+set complete+=.
+set complete+=k
+set complete+=b
+set completeopt-=preview
+set completeopt+=longest
+
+map <Leader>tl :call MoveTabLeft()<CR>
+map <Leader>tr :call MoveTabRight()<CR>
+
+"-------------------------
+" Colors
+"-------------------------
+
+colorscheme slate
+
+"-------------------------
+"Speelling 
+"-------------------------
+
+setlocal spell spelllang=en_us
+
+"-------------------------
+" Advanced Settings
+"-------------------------
+
+set mps-=[:]
+
+" Encoding menu
+set wildmenu
+set wcm=<Tab>
+menu Encoding.&koi8-r :e ++enc=koi8-r<CR>
+menu Encoding.&windows-1251 :e ++enc=cp1251<CR>
+menu Encoding.&cp866 :e ++enc=cp866<CR>
+menu Encoding.&utf-8 :e ++enc=utf8 <CR>
+
+" For 'view' mode
+if &readonly == 1
+set nonumber
+set nofoldenable
+set foldcolumn=10
+
+nmap <F10> :qa<cr>
+nmap <Space> <PageDown>
+endif
+
+highlight TooLongLine term=reverse ctermfg=Yellow ctermbg=Red
+match TooLongLine /.\%>81v/
+
+"-------------------------
+" Make command helper
+"-------------------------
+fun! SetMkfile()
+  let filemk = "Makefile"
+  let pathmk = "./"
+  let depth = 1
+  while depth < 4
+    if filereadable(pathmk . filemk)
+      return pathmk
+    endif
+    let depth += 1
+    let pathmk = "../" . pathmk
+  endwhile
+  return "."
+endf
+
+command! -nargs=* Make tabnew | let $mkpath = SetMkfile() | make <args> -C $mkpath | cwindow 10
+
+" Ingnore warnings in quickfix window
+set errorformat^=%-G%f:%l:\ warning:%m
+
+"-------------------------
+" Plugins Settings
+"-------------------------
+
+let g:tex_flavor='latex'
+
+
+
+
+let g:SessionMgr_AutoManage = 0
+let g:SessionMgr_DefaultName = "mysession"
+
+let g:Tlist_Show_One_File = 1
+let g:Tlist_GainFocus_On_ToggleOpen = 1
+
+let g:snippetsEmu_key = "<C-l>"
+
+let html_use_css=1
+
+"-------------------------
+" Filetypes
+"-------------------------
+au BufRead,BufNewFile *.w3af set filetype=w3af
+"------------------------
+"Vim Latex plugin settings
+"------------------------
+set grepprg=grep\ -nH\ $*
+let g:Tex_CompileRule_dvi = 'latex -interaction=nonstopmode --src-specials $*'
+let g:Tex_ViewRule_dvi = 'xdvi -geometry 640x720 -editor "gvim --servername XDVI --remote +\%l \%f" $* &'
+let g:Tex_UseEditorSettingInDVIViewer = 1
+
+"let g:Tex_ViewRuleComplete_dvi = 'xdvi -editor "gvim --servername xdvi --remote +\%l \%f" $* &'
+
+"------------------------
+"EnhancedCommentify  plugin settings
+"------------------------
+let g:EnhCommentifyUserMode = 'yes'
