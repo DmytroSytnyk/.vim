@@ -13,6 +13,7 @@ Bundle 'OmniCppComplete'
 Bundle 'Rip-Rip/clang_complete'
 "Bundle 'justmao945/vim-clang'
 Bundle 'rhysd/vim-clang-format'
+Bundle 'MarcWeber/vim-addon-manager' 
 
 filetype plugin indent on     " required!"
 
@@ -22,7 +23,7 @@ filetype plugin indent on     " required!"
 let opts = {'auto_install' : 1 }
 "call vam#ActivateAddons(["lh-refactor","lh-dev"], opts)
 call vam#ActivateAddons(["lh-cpp","lh-refactor","lh-dev"], opts)
-source .pento_vimrc
+source ~/.vim/.pento_vimrc
 "set runtimepath+=${test_dir}/vim-addon-manager
 
 "Marker keybindings

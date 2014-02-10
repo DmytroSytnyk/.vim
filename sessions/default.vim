@@ -1,8 +1,8 @@
 " ~/.vim/sessions/default.vim: Vim session script.
-" Created by session.vim 1.5 on 08 February 2014 at 13:26:49.
+" Created by session.vim 1.5 on 10 February 2014 at 15:12:29.
 " Open this file in Vim and run :source % to restore your session.
 
-set guioptions=aegimrLtT
+set guioptions=
 silent! set guifont=
 if exists('g:syntax_on') != 1 | syntax on | endif
 if exists('g:did_load_filetypes') != 1 | filetype on | endif
@@ -18,7 +18,7 @@ if &cp | set nocp | endif
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
-cd ~/doc/progs/PAmPERO/tests/resolvents/exact_resolvent
+cd ~/.vim
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
@@ -36,7 +36,7 @@ badd +1 laplace_exact_resolvent.cc
 badd +56 dealii_resolvent.h
 badd +1 changes
 args test.cc
-set lines=18 columns=139
+set lines=26 columns=210
 edit test.cc
 set splitbelow splitright
 set nosplitbelow
@@ -44,12 +44,12 @@ set nosplitright
 wincmd t
 set winheight=1 winwidth=1
 argglobal
-let s:l = 33 - ((7 * winheight(0) + 7) / 15)
+let s:l = 1 - ((0 * winheight(0) + 12) / 25)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-33
-normal! 07|
+1
+normal! 0
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
