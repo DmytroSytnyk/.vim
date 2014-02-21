@@ -181,11 +181,11 @@ call SMap("<F6>", ":bp<cr>")
 " F7 - next buffer
 call SMap("<F7>", ":bn<cr>")
 
-" ctrl+k - previous tab
-call SMap("<C-h>", ":tabprevious<CR>")
+" ctrl+shift+h - previous tab
+call SMap("<C-S-h>", ":tabprevious<CR>")
 
-" ctrl+l - next tab
-call SMap("<C-l>", ":tabnext<CR>")
+" ctrl+shift+l - next tab
+call SMap("<C-S-l>", ":tabnext<CR>")
 
 " F8 - Marks
 call SMap("<F8>", ":MarksBrowser<cr>")
